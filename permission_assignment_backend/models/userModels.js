@@ -9,8 +9,23 @@ exports.createUser = async (user, callback) => {
 };
 
 exports.editUser = (id, user, callback) => {
-    const query = 'UPDATE users SET name = ?, phone_number = ?, email = ?, password = ?, permission = ? WHERE id = ?';
-    db.query(query, [user.name, user.phone_number, user.email, user.password, user.permission, id], callback);
+    const finalPayload = []
+    let finalQuery = ""
+
+    if (user?.name) {
+        finalPayload.push(user.name)
+        finalQuery += 'name = ?,'
+    }
+    if (user?.password) {
+        const hashedPassword = await bcrypt.hash(user.password, 10);
+        finalPayload.push(hashedPassword)
+        finalQuery += 'password = ?,'
+    }
+    finalQuery = finalQuery.replace(/,\s*$/, '')
+    const query = `UPDATE users SET ${finalQuery}  WHERE id = ?`;
+    // 'name = ?, phone_number = ?, email = ?, password = ?, permission = ?'
+    // [user.name, user.phone_number, user.email, user.password, user.permission, id]
+    db.query(query, finalPayload, callback);
 };
 
 exports.deleteUser = (id, callback) => {

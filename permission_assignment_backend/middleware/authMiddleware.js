@@ -57,7 +57,6 @@ module.exports.checkPermission = (allowedPermissions) => {
         if (!hasPermission) {
             return errorResponse(res, 'Forbidden', 403);
         }
-
         next();
     };
 };

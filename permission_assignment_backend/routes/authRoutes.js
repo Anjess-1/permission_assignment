@@ -1,3 +1,5 @@
+
+
 // routes/authRoutes.js
 const express = require('express');
 const router = express.Router();
@@ -36,7 +38,7 @@ router.post('/', (req, res) => {
             }
 
             // Passwords match, generate JWT token
-            const token = jwtUtil.generateToken(user.id);
+            const token = jwtUtil.generateToken(id);
 
             res.json({
                 status: true,
